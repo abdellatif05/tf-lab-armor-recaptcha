@@ -12,59 +12,17 @@ resource "google_compute_security_policy" "main" {
   }
 
   rule {
-    action      = "allow"
-    description = "default rule"
-
-    match {
-      config {
-        src_ip_ranges = ["*"]
-      }
-
-      versioned_expr = "SRC_IPS_V1"
-    }
-
-    preview  = "false"
-    priority = "2147483647"
-  }
-
-  rule {
-    action = "allow"
-
-    match {
-      expr {
-        expression = "request.path.matches('good-score.html') && token.recaptcha_session.score > 0.4"
-      }
-    }
-
-    preview  = "false"
-    priority = "2000"
-  }
-
-  rule {
     action      = "deny(403)"
     description = "block invalid token"
 
     match {
       expr {
-        expression = "request.path.matches('test-recaptcha.html') && !token.recaptcha_action.valid"
+        expression = "request.path.matches('test-recaptcha-action.html') && !(token.recaptcha_action.valid)"
       }
     }
 
     preview  = "false"
     priority = "500"
-  }
-
-  rule {
-    action = "deny(403)"
-
-    match {
-      expr {
-        expression = "request.path.matches('bad-score.html') && token.recaptcha_session.score < 0.6"
-      }
-    }
-
-    preview  = "false"
-    priority = "3000"
   }
 
   rule {
@@ -82,6 +40,48 @@ resource "google_compute_security_policy" "main" {
     redirect_options {
       type = "GOOGLE_RECAPTCHA"
     }
+  }
+
+  rule {
+    action = "allow"
+
+    match {
+      expr {
+        expression = "request.path.matches('good-score.html') && token.recaptcha_session.score > 0.4"
+      }
+    }
+
+    preview  = "false"
+    priority = "2000"
+  }
+
+  rule {
+    action = "deny(403)"
+
+    match {
+      expr {
+        expression = "request.path.matches('bad-score.html') && token.recaptcha_session.score < 0.6"
+      }
+    }
+
+    preview  = "false"
+    priority = "3000"
+  }
+
+  rule {
+    action      = "allow"
+    description = "default rule"
+
+    match {
+      config {
+        src_ip_ranges = ["*"]
+      }
+
+      versioned_expr = "SRC_IPS_V1"
+    }
+
+    preview  = "false"
+    priority = "2147483647"
   }
 
   type = "CLOUD_ARMOR"
