@@ -1,0 +1,34 @@
+<html>
+  <head>
+    <title>ReCAPTCHA Action Token</title>
+    <script src="https://www.google.com/recaptcha/enterprise.js?render=ACTION_KEY"></script>
+  </head>
+  <body>
+    <h1>Click on button to test recaptcha action</h1>
+    <button onclick="testRecaptchaAction()">Test recaptcha action</button>
+  </body>
+  <script>
+    function testRecaptchaAction() {
+      grecaptcha.enterprise.ready(async () => {
+        grecaptcha.enterprise.execute('ACTION_KEY', {action: 'LOGIN'})
+        .then(onRecaptchaSuccess, onRecaptchaError);
+      });
+    }
+
+    function onRecaptchaSuccess(action_token) {
+      var xhr = new XMLHttpRequest();
+      xhr.onreadystatechange = function() {
+        if (this.readyState == 4) {
+          alert("code status: " + this.status)
+        }
+      };
+      xhr.open('GET','test-recaptcha-action.html', false);
+      xhr.setRequestHeader("X-Recaptcha-Token", action_token);
+      xhr.send(null);
+    }
+
+    function onRecaptchaError(reason) {
+      alert('Response promise rejected: ' + reason);
+    }
+  </script>
+</html>

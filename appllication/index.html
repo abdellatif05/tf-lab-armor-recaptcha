@@ -2,38 +2,12 @@
   <head>
     <title>ReCAPTCHA Session Token</title>
     <script src="https://www.google.com/recaptcha/enterprise.js?render=SESSION_KEY&waf=session" async defer></script>
-      <script src="https://www.google.com/recaptcha/enterprise.js?render=ACTION_KEY"></script>
-
   </head>
   <body>
     <h1>Main Page</h1>
     <p><a href="/good-score.html">Visit allowed link</a></p>
     <p><a href="/bad-score.html">Visit blocked link</a></p>
     <p><a href="/median-score.html">Visit redirect link</a></p>
-    <button onclick="testRecaptchaAction()">Test recaptcha action</button>
+    <p><a href="/index2.html">Test recaptcha action</a></p>
   </body>
-  <script>
-    function testRecaptchaAction() {
-      grecaptcha.enterprise.ready(async () => {
-        grecaptcha.enterprise.execute('ACTION_KEY', {action: 'LOGIN'})
-        .then(onRecaptchaSuccess, onRecaptchaError);
-      });
-    }
-
-    function onRecaptchaSuccess(action_token) {
-      var xhr = new XMLHttpRequest();
-      xhr.onreadystatechange = function() {
-        if (this.readyState == 4) {
-          alert("code status: " + this.status)
-        }
-      };
-      xhr.open('GET','test-recaptcha-action.html', false);
-      xhr.setRequestHeader("X-Recaptcha-Token", action_token);
-      xhr.send(null);
-    }
-
-    function onRecaptchaError(reason) {
-      alert('Response promise rejected: ' + reason);
-    }
-  </script>
 </html>
