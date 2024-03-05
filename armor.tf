@@ -32,7 +32,7 @@ resource "google_compute_security_policy" "main" {
 
     match {
       expr {
-        expression = "request.path.matches('good-score.html') \u0026\u0026    token.recaptcha_session.score > 0.4"
+        expression = "request.path.matches('good-score.html') && token.recaptcha_session.score > 0.4"
       }
     }
 
@@ -46,7 +46,7 @@ resource "google_compute_security_policy" "main" {
 
     match {
       expr {
-        expression = "request.path.matches('test-recaptcha.html') \u0026\u0026 !token.recaptcha_action.valid"
+        expression = "request.path.matches('test-recaptcha.html') && !token.recaptcha_action.valid"
       }
     }
 
@@ -59,7 +59,7 @@ resource "google_compute_security_policy" "main" {
 
     match {
       expr {
-        expression = "request.path.matches('bad-score.html') \u0026\u0026 token.recaptcha_session.score < 0.6"
+        expression = "request.path.matches('bad-score.html') && token.recaptcha_session.score < 0.6"
       }
     }
 
@@ -72,7 +72,7 @@ resource "google_compute_security_policy" "main" {
 
     match {
       expr {
-        expression = "request.path.matches('median-score.html') \u0026\u0026 token.recaptcha_session.score == 0.5"
+        expression = "request.path.matches('median-score.html') && token.recaptcha_session.score == 0.5"
       }
     }
 
